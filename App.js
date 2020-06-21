@@ -1,26 +1,47 @@
 import React, { useState, useEffect } from 'react';
-import { StyleSheet, Text, View, Animated, Button } from 'react-native';
+import { StyleSheet, StatusBar, View, ImageBackground,
+  Animated, TouchableOpacity, Text
+} from 'react-native';
+
+import bg from './src/assets/background.jpg';
 
 export default function App() {
   const [fade] = useState(new Animated.Value(0));
 
-  useEffect(() => {
-    Animated.timing(fade, {
-      toValue: 1,
-      duration: 5000
+  function signIn() {
+    Animated.spring(fade, {
+      toValue: 370,
+      velocity: 10  
     }).start();
-  }, []);
+  }
+
+  function signInFacebook() {
+    Animated.timing(fade, {
+      toValue: 0,
+      duration: 3000
+    }).start();
+  }
 
   return (
-    <View style={styles.container}>
-      <Animated.View 
-        style={{ opacity: fade }}
-      >
-        <View style={styles.fadeIn}>
-          <Text style={styles.text}>Studying animations!</Text>
+    <ImageBackground source={bg} style={styles.image} resizeMode="cover">
+      <View style={{ flex: 1 }}>
+        <StatusBar barStyle="light-content" />
+
+        <View style={styles.areaButton}>
+          <TouchableOpacity style={[styles.buttonSign]} onPress={signIn}>
+            <Text style={styles.textButton}>SIGN IN</Text>
+          </TouchableOpacity>
+
+          <TouchableOpacity style={styles.buttonFacebook} onPress={signInFacebook}>
+            <Text style={[styles.textButton, { color: '#fff' }]}>SIGN IN WITH FACEBOOK</Text>
+          </TouchableOpacity>
         </View>
-    </Animated.View>
-    </View>
+
+        <Animated.View style={[styles.areaAnimated, { top: fade }]}>
+
+        </Animated.View>
+      </View>
+    </ImageBackground>
   );
 }
 
@@ -32,15 +53,45 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
 
-  fadeIn: {
-    width: 250,
-    height: 50,
-    backgroundColor: 'powderblue'
+  image: {
+    flex: 1
   },
 
-  text: {
+  areaAnimated: {
+    height: 200,
+    backgroundColor: '#fff',
+  },
+
+  areaButton: {
+    position: 'absolute',
+    alignItems: 'center',
+    bottom: 0,
+    right: 20,
+    paddingBottom: 40,
+    zIndex: 1
+  },
+
+  buttonSign: {
+    width: 300,
+    height: 50,
+    backgroundColor: '#CCC',
+    borderRadius: 25,
+    margin: 10,
+    alignItems: 'center',
+    justifyContent: 'center'
+  },
+
+  buttonFacebook: {
+    width: 300,
+    height: 50,
+    backgroundColor: '#4267B2',
+    borderRadius: 25,
+    alignItems: 'center',
+    justifyContent: 'center'
+  },
+
+  textButton: {
     fontSize: 18,
-    textAlign: 'center',
-    margin: 10
-  }
+    textAlign: 'center'
+  },
 });
